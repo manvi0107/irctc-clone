@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ticket Resale</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Blockchain Train Ticket Resale</h1>
+
+  <div>
+    <h3>List Ticket</h3>
+    <input id="from" placeholder="From Station" />
+    <input id="to" placeholder="To Station" />
+    <input id="price" placeholder="Price in ETH" />
+    <button onclick="listTicket()">List Ticket</button>
+  </div>
+
+  <div>
+    <h3>Buy Ticket</h3>
+    <input id="ticketId" placeholder="Ticket ID" />
+    <input id="amount" placeholder="Price in ETH" />
+    <button onclick="buyTicket()">Buy</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+  <script src="resale.js"></script>
+</body>
+</html>

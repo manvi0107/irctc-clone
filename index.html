@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IRCTC Clone</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Login check -->
+  <script>
+    if (localStorage.getItem('loggedIn') !== 'true') {
+      window.location.href = 'login.html';
+    }
+  </script>
+
+  <!-- Header -->
+  <header>
+    <h1 style="display: inline-block;">IRCTC Booking Portal</h1>
+    <button onclick="logout()" style="float: right; margin: 15px; padding: 6px 12px;">Logout</button>
+  </header>
+
+  <main>
+    <!-- Search Form -->
+    <form id="searchForm">
+      <label>
+        From:
+        <input type="text" id="fromStation" required />
+      </label>
+      <label>
+        To:
+        <input type="text" id="toStation" required />
+      </label>
+      <button type="submit">Search Trains</button>
+    </form>
+
+    <hr/>
+
+    <!-- AI Price Prediction Form -->
+    <h2>Fare Estimator</h2>
+    <form id="predictForm">
+      <label>Base Fare: <input type="number" id="baseFare" required /></label><br/>
+      <label>Reservation Charge: <input type="number" id="reservationCharge" required /></label><br/>
+      <label>Superfast Charge: <input type="number" id="superfastCharge" required /></label><br/>
+      <label>Fuel Amount: <input type="number" id="fuelAmount" required /></label><br/>
+      <label>Distance (km): <input type="number" id="distance" required /></label><br/>
+      <label>Duration (hours): <input type="number" id="duration" required /></label><br/><br/>
+      <button type="submit">Get Estimated Fare</button>
+    </form>
+
+    <section id="predictionResult" style="margin-top: 20px;"></section>
+  </main>
+
+  <script>
+    function logout() {
+      localStorage.removeItem('loggedIn');
+      localStorage.removeItem('from');
+      localStorage.removeItem('to');
+      window.location.href = 'login.html';
+    }
+
+    // Handle prediction form submission
+    document.getElementById('predictForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const payload = {
+        baseFare: parseFloat(document.getElementById('baseFare').value),
+        reservationCharge: parseFloat(document.getElementById('reservationCharge').value),
+        superfastCharge: parseFloat(document.getElementById('superfastCharge').value),
+        fuelAmount: parseFloat(document.getElementById('fuelAmount').value),
+        distance: parseFloat(document.getElementById('distance').value),
+        duration: parseFloat(document.getElementById('duration').value)
+      };
+
+      const apiUrl = "http://127.0.0.1:5000";  // 🔄 Updated to local
+
+      try {
+        const response = await fetch(apiUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+        document.getElementById("predictionResult").innerHTML =
+          `<strong>Estimated Fare:</strong> ₹${result.predictedFare.toFixed(2)}`;
+      } catch (error) {
+        document.getElementById("predictionResult").innerHTML =
+          `<span style="color: red;">Error fetching prediction.</span>`;
+        console.error(error);
+      }
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+
